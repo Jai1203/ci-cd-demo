@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #1e1e2f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #2c2c3e;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      width: 300px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Calculator 🔢</h2>
+
+  <input id="a" type="number" placeholder="Enter A">
+  <input id="b" type="number" placeholder="Enter B">
+
+  <div>
+    <button onclick="calculate('add')">➕ Add</button>
+    <button onclick="calculate('subtract')">➖ Subtract</button>
+    <button onclick="calculate('multiply')">✖ Multiply</button>
+    <button onclick="calculate('divide')">➗ Divide</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+async function calculate(operation) {
+  try {
+    const a = parseFloat(document.getElementById("a").value);
+    const b = parseFloat(document.getElementById("b").value);
+
+    const res = await fetch(`http://127.0.0.1:3000/${operation}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ a, b })
+    });
+
+    const data = await res.json();
+
+    if (data.result !== undefined) {
+      document.getElementById("result").innerText = "Result: " + data.result;
+    } else {
+      document.getElementById("result").innerText = data.error;
+    }
+
+  } catch (err) {
+    document.getElementById("result").innerText = "Error: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>

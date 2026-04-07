@@ -1,44 +1,41 @@
-const express = require("express");
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-// Add
-app.post("/add", (req, res) => {
+// ✅ THIS LINE FIXES YOUR ISSUE
+app.use(express.static('public'));
+
+// test route
+app.get('/health', (req, res) => {
+  res.json({ status: "OK" });
+});
+
+// calculator routes
+app.post('/add', (req, res) => {
   const { a, b } = req.body;
   res.json({ result: a + b });
 });
 
-// Subtract
-app.post("/subtract", (req, res) => {
+app.post('/subtract', (req, res) => {
   const { a, b } = req.body;
   res.json({ result: a - b });
 });
 
-// Multiply
-app.post("/multiply", (req, res) => {
+app.post('/multiply', (req, res) => {
   const { a, b } = req.body;
   res.json({ result: a * b });
 });
 
-// Divide
-app.post("/divide", (req, res) => {
+app.post('/divide', (req, res) => {
   const { a, b } = req.body;
-
-  if (b === 0) {
-    return res.status(400).json({ error: "Cannot divide by zero" });
-  }
-
+  if (b === 0) return res.json({ error: "Cannot divide by zero" });
   res.json({ result: a / b });
-});
-
-// Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "OK" });
 });
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
-
-module.exports = app;
