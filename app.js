@@ -36,6 +36,8 @@ app.post('/divide', (req, res) => {
   res.json({ result: a / b });
 });
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
+module.exports = server;
