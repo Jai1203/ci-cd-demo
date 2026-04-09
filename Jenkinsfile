@@ -21,5 +21,13 @@ pipeline {
             }
         }
 
+        stage('Run Docker Container') {
+            steps {
+                bat 'docker stop calculator-container || exit 0'
+                bat 'docker rm calculator-container || exit 0'
+                bat 'docker run -d -p 3000:3000 --name calculator-container calculator-app'
+            }
+        }
+
     }
 }
